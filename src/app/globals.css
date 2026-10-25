@@ -1,0 +1,53 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Colour tokens, sampled from the official logo (gold ring, saffron dusk, sky blue) */
+  --c-obsidian: 11 9 7;
+  --c-charcoal: 24 21 17;
+  --c-slate: 42 37 31;
+  --c-ivory: 243 235 221;
+  --c-saffron: 236 148 58;
+  --c-gold: 191 150 64;
+  --c-sky: 122 156 205;
+  --c-error: 244 140 120;
+
+  /* Layout, motion */
+  --w-content: 80rem;
+  --gutter: clamp(1.25rem, 5vw, 4rem);
+  --section-y: clamp(5rem, 11vw, 10rem);
+  --d-fast: 180ms;
+  --d-base: 360ms;
+  --d-slow: 900ms;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+html { scroll-behavior: smooth; scroll-padding-top: 5rem; background: rgb(var(--c-obsidian)); }
+body { @apply bg-obsidian font-sans text-ivory antialiased; overflow-x: hidden; text-rendering: optimizeLegibility; }
+::selection { background: rgb(var(--c-saffron)); color: rgb(var(--c-obsidian)); }
+
+:focus-visible { outline: 2px solid rgb(var(--c-saffron)); outline-offset: 3px; border-radius: 2px; }
+
+/* Delicate paper-grain texture, applied once on the body */
+body::after {
+  content: ""; position: fixed; inset: 0; z-index: 60; pointer-events: none; opacity: 0.05; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+@layer components {
+  .section-y { padding-block: var(--section-y); }
+  .gutter { padding-inline: var(--gutter); }
+  .hairline { border-color: rgb(var(--c-gold) / 0.28); }
+  .text-display { @apply font-display uppercase leading-[0.92] tracking-[0.005em]; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+
+/* Page-to-page fade (opacity only, so fixed-position children such as the lightbox are unaffected) */
+@keyframes page-enter { from { opacity: 0; } to { opacity: 1; } }
+.page-enter { animation: page-enter 380ms var(--ease) backwards; }
+@media (prefers-reduced-motion: reduce) { .page-enter { animation: none; } }
